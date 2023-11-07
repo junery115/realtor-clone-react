@@ -1,7 +1,44 @@
-import { FcGoogle } from "react-icons/fc"
-const OAuth = () => {
+import { FcGoogle } from "react-icons/fc";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { toast } from "react-toastify";
+import { db } from "../../firebase";
+import { doc, serverTimestamp, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router";
+
+
+ const OAuth = () => {
+  const navigate = useNavigate();
+  async function onGoogleClick(){
+   try {
+     const auth = getAuth() 
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+
+      const user = result.user
+
+      //check if user exist in db already
+
+      const docRef = doc(db, "users", user.uid)
+
+      const docSnap = await getDoc(docRef)
+
+      if(!docSnap.exist()){
+        await setDoc(docRef, {
+          name: user.displayName,
+          email: user.email,
+          timestamp: serverTimestamp(),
+        })
+      }
+      navigate("/");
+
+   } catch (error) {
+      toast.error("Could not authorize with google ");
+   } 
+  }
   return (
-  <button type=""
+  <button
+      onClick={onGoogleClick}
+      type="button"
     className="flex
       items-center
       justify-center w-full
