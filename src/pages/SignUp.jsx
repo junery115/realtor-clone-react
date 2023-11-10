@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { Link } from "react-router-dom";
-import OAuth from "./components/OAuth";
+import OAuth from "../components/OAuth";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore"
 import { db } from "../firebase"; 

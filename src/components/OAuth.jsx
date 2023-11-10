@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
-import { db } from "../../firebase";
+import { db } from "../firebase";
 import { doc, serverTimestamp, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
 
