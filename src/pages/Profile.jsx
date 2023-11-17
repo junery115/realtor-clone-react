@@ -16,7 +16,7 @@ const Profile = () => {
   const {name, email } = formData;
 
   function onLogout(){
-     // auth.signOut();
+      auth.signOut();
     navigate("/");
   }
   function onChange(e){
