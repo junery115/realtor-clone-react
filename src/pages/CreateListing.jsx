@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 
 export default function CreateListing() {
+    const [geolocationEnabled, setGeolocationEnabled] = useState(false);
+
     const [formData, setFormData] = useState({
         type: "rent",
         name: "",
@@ -14,11 +16,40 @@ export default function CreateListing() {
         offer: false,
         regularPrice: 0,
         discountedPrice: 0,
+        latitude: 0,
+        longitude: 0,
     });
 
-    const { type, name, bedrooms, bathrooms, parking, furnished, description, address, offer, regularPrice, discountedPrice } = formData;
+    const { type, name, bedrooms, bathrooms, parking, furnished, description, address, offer, regularPrice, discountedPrice, latitude, longitude } = formData;
 
-    function onChange() {}
+    function onChange(e) {
+        let boolean = null;
+        
+        if(e.target.value === 'true'){
+            boolean = true;
+        }
+
+        if(e.target.value === 'false'){
+            boolean = false;
+        }
+        
+        //files
+        if(e.target.files){
+            setFormData((prevState) => ({
+                ...prevState,
+                images: e.target.files
+            }));
+        }
+
+        //text/boolean/number
+        if(!e.target.files){
+            setFormData((prevState) => ({
+                ...prevState,
+                [e.target.id]: boolean ?? e.target.value,
+            }));
+        }
+    }
+
   return (
     <main className='max-w-md px-2 mx-auto'>
         <h1 className='text-3xl text-center mt-6
@@ -36,7 +67,7 @@ export default function CreateListing() {
                 
 
                 <button type='button'
-                 id='type' value='sale' 
+                 id='type' value='rent' 
                 onClick={onChange} 
                  className={`ml-3 px-7 py-3 font-medium
                 text-sm uppercase shadow-md rounded hover:shadow-lg focus:shaow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${type === "sale" ? "bg-white text-black " : "bg-slate-600 text-white"}`}>
@@ -130,6 +161,17 @@ export default function CreateListing() {
               className='w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out
               focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6'/>
 
+               {!geolocationEnabled && (
+                  <div>
+                    <div>
+                        <p className='text-lg font-semibold'>Latitude</p>
+                        <input type='number' id='latitude' value={latitude} onChange={onChange} required 
+                        className='w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded
+                        transition duration-150 ease-in-out'/>
+                    </div>
+                  </div>
+               )}
+
             <p className='text-lg  font-semibold'>Description</p>
             <textarea type="text"
              id='description'
@@ -152,7 +194,7 @@ export default function CreateListing() {
                 </button>
 
                 <button type='button'
-                 id='furnished' value={false} 
+                 id='offer' value={false} 
                 onClick={onChange} 
                  className={`ml-3 px-7 py-3 font-medium
                 text-sm uppercase shadow-md rounded hover:shadow-lg focus:shaow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${offer ? "bg-white text-black " : "bg-slate-600 text-white"}`}>
